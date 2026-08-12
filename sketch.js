@@ -118,7 +118,7 @@ let compression_count = 0;
 let now,interval;
 let lastTouchTime = 0;
 // log into google sheets - google app script
-const scriptURL = "https://script.google.com/macros/s/AKfycbyy74a7Zf3vnGzZSuCdG2uQaCw06EQNbmnGOl0NEJbEyaM023RKNweiG6KmOfBGFgLETg/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxNVQSYjwBKOwIT8stzs-7oS4mOBfTWHkVzP_e0tr3QRfTm4_imeTxxDbV9qVfJclPLKg/exec";
 let sessionLogged = false;
 // progress tracking (compression score history, saved to localStorage)
 let scoreLoggedForAttempt = false;  // guards against logging the same attempt multiple times
@@ -940,7 +940,14 @@ window.onload = () => {
     // ========================================
     function startCanvas() {
         if (!canvasActive) {
-            canvas = createCanvas(windowWidth, windowHeight);
+            // windowWidth/windowHeight can be momentarily wrong in Safari
+            // right when this fires, because the same tap that starts CPR
+            // also kicks off the address-bar hide animation, and
+            // window.innerWidth/innerHeight can be read mid-transition.
+            // Measuring the actual #p5Screen box (sized via CSS 100dvh)
+            // instead gives the real, current visible size.
+            const rect = p5Screen.getBoundingClientRect();
+            canvas = createCanvas(rect.width, rect.height);
             canvas.parent("p5Screen");
             canvasActive = true;
         }
@@ -1514,12 +1521,30 @@ window.onload = () => {
         clearTimeout(t4); clearTimeout(t5);
         cpr5.style.display = "none";
         p5Screen.style.display = "flex";
-        startCanvas();
-        currentState = "play";
-        play_start_time = millis();
+        // Wait a frame so #p5Screen has actually been laid out (and
+        // Safari's address-bar animation has had a moment to settle)
+        // before measuring it for the canvas size.
+        requestAnimationFrame(() => {
+            startCanvas();
+            currentState = "play";
+            play_start_time = millis();
+        });
     };
     startcpr.onclick = handleStartCPR;
     startcpr.addEventListener('touchstart', handleStartCPR);
+
+    // Safari's address bar can keep animating for a bit after the tap
+    // that triggered it, changing the visible viewport size without
+    // firing a normal window 'resize' event. visualViewport's own
+    // resize event catches that, so the canvas stays correctly sized
+    // even if it settles a moment after CPR has already started.
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+            if (!canvasActive) return;
+            const rect = p5Screen.getBoundingClientRect();
+            resizeCanvas(rect.width, rect.height);
+        });
+    }
     // --- End Screen Buttons ---
     const handleNextWin = () => {
         win.style.display = "none";
@@ -2282,7 +2307,9 @@ function reset() {
     postQ7Photo = null;
 }
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+    if (!canvasActive) return;
+    const rect = p5Screen.getBoundingClientRect();
+    resizeCanvas(rect.width, rect.height);
 }
 function touchStarted(event) {
     // p5 (in global mode) binds this to touches anywhere on the page,
