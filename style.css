@@ -6,6 +6,13 @@ html, body {
   overflow: hidden;   /* ✨ disables all scrolling */
   background: #F25C3B; /* fallback so nothing ever shows plain white */
 }
+body {
+  background-color: #ffffff;
+  /* Adds top and bottom inset padding equal to iOS safe areas */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
+}
 
 .screen {
   width: 100vw;
