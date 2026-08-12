@@ -4,6 +4,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;   /* ✨ disables all scrolling */
+  background: #F25C3B; /* fallback so nothing ever shows plain white */
 }
 
 .screen {
@@ -592,6 +593,7 @@ left: 5vw; }
   height: 100vh;
   background: rgba(0, 0, 0, 0.15);
   z-index: 1000;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -637,6 +639,58 @@ left: 5vw; }
 
 .modalButton:active {
   transform: scale(0.97);
+}
+
+/* ========================================
+   PROTOCOL CHECK MODALS
+   (Check–call–compress confirmation, and the
+   "start from checkdanger" follow-up)
+   ======================================== */
+.protocolCard {
+  text-align: left;
+  max-height: 86vh;
+  overflow-y: auto;
+}
+
+.protocolHighlight {
+  color: #F25C3B;
+  font-weight: 800;
+}
+
+.protocolList {
+  margin: 14px 0;
+  padding-left: 22px;
+  font-family: 'Albert Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.protocolList li {
+  margin-bottom: 6px;
+}
+
+.protocolSubheading {
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+  margin: 4px 0 6px;
+  line-height: 1.3;
+}
+
+.protocolInfoText {
+  font-family: 'Albert Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.protocolStartBtn {
+  width: 100%;
+  margin-top: 22px;
 }
 
 /* ========================================
