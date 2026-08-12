@@ -118,7 +118,7 @@ let compression_count = 0;
 let now,interval;
 let lastTouchTime = 0;
 // log into google sheets - google app script
-const scriptURL = "https://script.google.com/macros/s/AKfycbyy74a7Zf3vnGzZSuCdG2uQaCw06EQNbmnGOl0NEJbEyaM023RKNweiG6KmOfBGFgLETg/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxNVQSYjwBKOwIT8stzs-7oS4mOBfTWHkVzP_e0tr3QRfTm4_imeTxxDbV9qVfJclPLKg/exec";
 let sessionLogged = false;
 // progress tracking (compression score history, saved to localStorage)
 let scoreLoggedForAttempt = false;  // guards against logging the same attempt multiple times
@@ -860,6 +860,11 @@ window.onload = () => {
     const practiceChoiceModal = document.getElementById("practiceChoiceModal");
     const newCaseBtn = document.getElementById("newCaseBtn");
     const onlyCompressionsBtn = document.getElementById("onlyCompressionsBtn");
+    const protocolCheckModal = document.getElementById("protocolCheckModal");
+    const protocolYesBtn = document.getElementById("protocolYesBtn");
+    const protocolNoBtn = document.getElementById("protocolNoBtn");
+    const protocolInfoModal = document.getElementById("protocolInfoModal");
+    const protocolStartBtn = document.getElementById("protocolStartBtn");
     const wpromisepress = document.getElementById("wpromisepress");
     const wranipromisepress = document.getElementById("wranipromisepress");
     // ========================================
@@ -1054,20 +1059,56 @@ window.onload = () => {
     };
     beginBtn.onclick = handleBegin;
     beginBtn.addEventListener('touchstart', handleBegin);
+    // Tapping the intro bubble used to jump straight to cpr5 (skipping
+    // the whole check-danger/response/breathing flow). It now first asks
+    // whether the learner has already followed the check-call-compress
+    // protocol. The intro screen stays visible (dimmed) behind the
+    // modal — same pattern as the practice-again modal — so nothing
+    // needs to be hidden just to open it.
     const handleBubbleShortcut = () => {
         userStartAudio();
+        introAudio.pause();
+        introAudio.currentTime = 0;
+        protocolCheckModal.style.display = "flex";
+    };
+    beginBubBtn.onclick = handleBubbleShortcut;
+    beginBubBtn.addEventListener('touchstart', handleBubbleShortcut);
+
+    // "Yes" — same shortcut as before: skip straight to cpr5.
+    const handleProtocolYes = () => {
         [t1, t2, t3, t4, t5, t6, tOkOk, tHmHm].forEach(t => clearTimeout(t));
+        protocolCheckModal.style.display = "none";
         begin1.style.display = "none";
         intro.style.display = "none";
         cpr4.style.display = "none";
         cpr5.style.display = "flex";
-        introAudio.pause();
-        introAudio.currentTime = 0;
         cprC4aud.stop();
         cprBeginaud.play();
     };
-    beginBubBtn.onclick = handleBubbleShortcut;
-    beginBubBtn.addEventListener('touchstart', handleBubbleShortcut);
+    protocolYesBtn.onclick = handleProtocolYes;
+    protocolYesBtn.addEventListener('touchstart', handleProtocolYes);
+
+    // "No, I am not aware of this protocol" — swap to the second modal,
+    // which explains the protocol and offers to start proper training.
+    const handleProtocolNo = () => {
+        protocolCheckModal.style.display = "none";
+        protocolInfoModal.style.display = "flex";
+    };
+    protocolNoBtn.onclick = handleProtocolNo;
+    protocolNoBtn.addEventListener('touchstart', handleProtocolNo);
+
+    // "Start" on the second modal — begin the full training flow from
+    // checkdanger, same entry point as the normal "Start" button on the
+    // intro screen.
+    const handleProtocolStart = () => {
+        protocolInfoModal.style.display = "none";
+        begin1.style.display = "none";
+        intro.style.display = "none";
+        checkdanger.style.display = "flex";
+        checkdAudio.play();
+    };
+    protocolStartBtn.onclick = handleProtocolStart;
+    protocolStartBtn.addEventListener('touchstart', handleProtocolStart);
     const handleRaja = () => {
         genderState = 1;
         console.log("Gender:", genderState);
