@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css?v=10">
+    <link rel="stylesheet" type="text/css" href="style.css?v=11">
     <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="gasping.gif">
     <meta charset="utf-8" />
@@ -1105,8 +1105,38 @@
       </div>
     </div>
 
+    <div class="modalOverlay" id="protocolCheckModal" style="display:none;">
+      <div class="modalCard protocolCard">
+        <div class="modalHeading">Have you ensured to follow the <span class="protocolHighlight">Check &ndash; call &ndash; compress</span> protocol?</div>
+        <ol class="protocolList">
+          <li><span class="protocolHighlight">Check for danger</span> around you</li>
+          <li><span class="protocolHighlight">Check for response</span> from victim</li>
+          <li><span class="protocolHighlight">Check for breathing</span> from victim</li>
+          <li><span class="protocolHighlight">Call</span> for medical help</li>
+        </ol>
+        <div class="protocolSubheading">Remember you can start compression only if &ndash;</div>
+        <ol class="protocolList">
+          <li>Environment is safe for you to perform chest compression</li>
+          <li>Victim is not responsive</li>
+          <li>Victim is not breathing or breathing abnormally</li>
+          <li>you have called for medical help</li>
+        </ol>
+        <div class="modalButtons">
+          <div class="modalButton" id="protocolNoBtn">No, I am not aware of this protocol</div>
+          <div class="modalButton" id="protocolYesBtn">Yes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modalOverlay" id="protocolInfoModal" style="display:none;">
+      <div class="modalCard protocolCard">
+        <div class="protocolInfoText">If you are not aware of this protocol it is good to start the training from first learning to recognise the signs to look for before performing CPR</div>
+        <div class="modalButton protocolStartBtn" id="protocolStartBtn">Start</div>
+      </div>
+    </div>
+
     <main>
     </main>
-    <script src="sketch.js?v=10"></script>
+    <script src="sketch.js?v=11"></script>
   </body>
 </html>
