@@ -1506,14 +1506,12 @@ window.onload = () => {
     wpromisepress.addEventListener('touchstart', handleWPromisePress);
     const handlePracticeAgainRaja = () => {
         console.log("raja.....");
-        promisesealedraja.style.display = "none";
         practiceChoiceModal.style.display = "flex";
     };
     practiceagainbtnraja.onclick = handlePracticeAgainRaja;
     practiceagainbtnraja.addEventListener('touchstart', handlePracticeAgainRaja);
     const handlePracticeAgainRani = () => {
         console.log("rani.....");
-        promisesealedrani.style.display = "none";
         practiceChoiceModal.style.display = "flex";
     };
     practiceagainbtnrani.onclick = handlePracticeAgainRani;
@@ -1521,9 +1519,15 @@ window.onload = () => {
 
     // "Practice again" choice modal: take a whole new case (back to
     // begin1, same as before) or skip straight to compressions-only
-    // practice (same shortcut as the begin1 bubble button).
+    // practice (same shortcut as the begin1 bubble button). Both
+    // handlers now also hide whichever "sealed" screen was showing
+    // underneath the modal, since the buttons that open the modal no
+    // longer hide it themselves (that used to leave the body's plain
+    // white/no background showing through the translucent overlay).
     const handleNewCase = () => {
         practiceChoiceModal.style.display = "none";
+        promisesealedraja.style.display = "none";
+        promisesealedrani.style.display = "none";
         begin1.style.display = "flex";
         reset();
         dialDisplay.textContent = "995";
@@ -1536,6 +1540,8 @@ window.onload = () => {
 
     const handleOnlyCompressions = () => {
         practiceChoiceModal.style.display = "none";
+        promisesealedraja.style.display = "none";
+        promisesealedrani.style.display = "none";
         reset();
         dialDisplay.textContent = "995";
         dialDisplay.classList.add("empty");
