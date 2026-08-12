@@ -118,7 +118,7 @@ let compression_count = 0;
 let now,interval;
 let lastTouchTime = 0;
 // log into google sheets - google app script
-const scriptURL = "https://script.google.com/macros/s/AKfycbzJxJo-To1krKaqWwv5kbpaTJ3ucBcg5H_D6IP1tcF3v7O_BqiPDKohXEPLgQbqm-QqwA/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbyy74a7Zf3vnGzZSuCdG2uQaCw06EQNbmnGOl0NEJbEyaM023RKNweiG6KmOfBGFgLETg/exec";
 let sessionLogged = false;
 // progress tracking (compression score history, saved to localStorage)
 let scoreLoggedForAttempt = false;  // guards against logging the same attempt multiple times
