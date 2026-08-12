@@ -2243,7 +2243,24 @@ function reset() {
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
-function touchStarted() {
+function touchStarted(event) {
+    // p5 (in global mode) binds this to touches anywhere on the page,
+    // not just the CPR canvas, so that tapping during compressions
+    // doesn't scroll/zoom the screen (`return false` below calls
+    // preventDefault() on the touch). The side effect: it was also
+    // preventDefault-ing taps on real form elements — the name <input>,
+    // the postq7 "My promise" <textarea>, and the postq7 camera
+    // <button> — which stopped the browser's native tap-to-focus /
+    // tap-to-click behavior from ever firing on them. Those elements
+    // don't have their own manual touchstart handlers (unlike the
+    // image-based buttons elsewhere in the app), so this global
+    // interception was the only thing blocking them. Let native touch
+    // behavior through for form elements; keep intercepting everywhere
+    // else so CPR gameplay is unaffected.
+    const target = event && event.target;
+    if (target && target.closest && target.closest("input, textarea, button")) {
+        return true;
+    }
     mousePressed();
     return false;
 }
