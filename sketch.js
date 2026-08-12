@@ -118,7 +118,7 @@ let compression_count = 0;
 let now,interval;
 let lastTouchTime = 0;
 // log into google sheets - google app script
-const scriptURL = "https://script.google.com/macros/s/AKfycbxNVQSYjwBKOwIT8stzs-7oS4mOBfTWHkVzP_e0tr3QRfTm4_imeTxxDbV9qVfJclPLKg/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzJxJo-To1krKaqWwv5kbpaTJ3ucBcg5H_D6IP1tcF3v7O_BqiPDKohXEPLgQbqm-QqwA/exec";
 let sessionLogged = false;
 // progress tracking (compression score history, saved to localStorage)
 let scoreLoggedForAttempt = false;  // guards against logging the same attempt multiple times
@@ -2031,8 +2031,10 @@ async function logSession() {
         country: country,
         state: state,
         city: city,
+        gender: genderState === 1 ? "Raja" : (genderState === 0 ? "Rani" : "Unknown"),
         goodCompressions: good_compression,
         targetCompressions: maxTotalCompressions,
+        avgBpm: bpmSampleCount > 0 ? Math.round(bpmSum / bpmSampleCount) : 0,
 
         // PRE QUESTIONS
         preQ1: preAnswers.q1,
